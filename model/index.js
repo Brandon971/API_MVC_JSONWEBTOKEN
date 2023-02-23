@@ -22,7 +22,7 @@ class User {
         db.query(strQry, async( err, data) =>{
             if(err) throw err;
             if((!data.length) || (data == null)) {
-                res.status(401),json({err:"Incorrect email address"});
+                res.status(401).json({err:"Incorrect email address"});
             }else {
                 await compare(userPass,
                     data[0].userPass,(cErr,cResult)=> {
@@ -39,7 +39,7 @@ class User {
                             httpOnly: true
                         })
                         if (cResult) {
-                            res.status(200),json({
+                            res.status(200).json({
                                 msg:'Logged in',
                                 jwToken,
                                 result: data[0]
@@ -101,10 +101,8 @@ class User {
             if(err) {
                 res.status(401).json({err});
             }else {
-                // Create a token
+                
                 const jwToken = createToken(user);
-                // This token will be saved in the cookie. 
-                // The duration is in milliseconds.
                 res.cookie("LegitUser", jwToken, {
                     maxAge: 3600000,
                     httpOnly: true
